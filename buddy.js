@@ -4,8 +4,10 @@ const insert = function(lib) {
     return new Promise((resolve, reject) => {
         let id = '_insert-' + lib
 
-        if (document.getElementById(id) !== null)
+        if (document.getElementById(id) !== null) {
             resolve()
+            return
+        }
 
         let script = document.createElement('script')
             script.setAttribute('src', uri)
