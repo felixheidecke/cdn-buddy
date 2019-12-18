@@ -1,0 +1,24 @@
+{
+  "name": "cdn-buddy",
+  "version": "0.1.0",
+  "description": "Load JS and CSS from unpkg.com",
+  "main": "buddy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felixheidecke/cdn-buddy.git"
+  },
+  "keywords": [
+    "requirejs",
+    "cdn",
+    "remote"
+  ],
+  "author": "Felix Heidecke",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felixheidecke/cdn-buddy/issues"
+  },
+  "homepage": "https://github.com/felixheidecke/cdn-buddy#readme"
+}
