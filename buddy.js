@@ -27,7 +27,7 @@ const insert = function(lib) {
     });
 }
 
-export default function(lib) {
+module.exports = function(lib) {
     if (typeof lib === "string") {
         return insert(lib);
     }
