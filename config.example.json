@@ -1,0 +1,7 @@
+{
+  "baseUrl" : "https://cdnjs.cloudflare.com/ajax/libs",
+  "paths": {
+    "jquery" : "jquery/3.4.1/jquery.min.js",
+    "pure": "pure/1.0.1/pure-min.css"
+  }
+}
