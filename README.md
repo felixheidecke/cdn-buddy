@@ -1,6 +1,10 @@
 # cdn-buddy
 Load JS and CSS from a CDN of your choosing
 
+## Install
+
+`npm install felixheidecke/cdn-buddy --save`
+
 ## Usage
 
 ```js
