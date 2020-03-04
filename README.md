@@ -4,7 +4,7 @@ Load JS and CSS from a CDN of your choosing
 ## Install
 
 ```node
-npm install felixheidecke/cdn-buddy --save`
+npm install felixheidecke/cdn-buddy --save
 ```
 
 ## Usage
