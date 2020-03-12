@@ -29,3 +29,4 @@ cdn.require(dependencies).then( () => {
 ### @TODO
 
 - Better implementation of requirejs config support
+- Add "defer" option
