@@ -1,7 +1,6 @@
 {
-  "baseUrl" : "https://cdnjs.cloudflare.com/ajax/libs",
+  "baseUrl" : "https://unpkg.com/",
   "paths": {
-    "jquery" : "jquery/3.4.1/jquery.min.js",
-    "pure": "pure/1.0.1/pure-min.css"
+    "jquery" : "jquery@3.4.1/dist/jquery.min.js"
   }
 }
