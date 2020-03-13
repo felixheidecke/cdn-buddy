@@ -23,4 +23,5 @@ cdn.config = require('./config.example.json')
 ```
 ### @TODO
 
+- Better documentation
 - Better implementation of requirejs config support
