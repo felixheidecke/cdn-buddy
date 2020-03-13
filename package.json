@@ -1,11 +1,14 @@
 {
   "name": "cdn-buddy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Load JS and CSS from unpkg.com",
   "main": "buddy.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/felixheidecke/cdn-buddy.git"
+  },
+  "scripts": {
+    "build": "webpack -p"
   },
   "keywords": [
     "requirejs",
@@ -17,5 +20,12 @@
   "bugs": {
     "url": "https://github.com/felixheidecke/cdn-buddy/issues"
   },
-  "homepage": "https://github.com/felixheidecke/cdn-buddy#readme"
+  "homepage": "https://github.com/felixheidecke/cdn-buddy#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  }
 }
