@@ -20,6 +20,12 @@
   class buddy {
 
     constructor () {
+      if (!window || !document) {
+        console.clear()
+        console.error('cdn-buddy only runs in the browser! 😶')
+        return
+      }
+
       this.__ns_status = '__CDN_BUDDY_STATUS'
       this.__ns_queue  = '__CDN_BUDDY_QUEUE'
       this.__ns_config = '__CDN_BUDDY_CONFIG'
@@ -174,9 +180,8 @@
     }
   }
 
-  if (typeof module !== 'undefined') {
+  if (typeof module === 'object' && module.exports) {
     module.exports = new buddy
-    return
   }
 
   window.cdnBuddy = new buddy
