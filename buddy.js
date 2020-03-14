@@ -18,7 +18,6 @@
 
 ( () => {
   class buddy {
-
     constructor () {
       if (!window || !document) {
         console.clear()
@@ -180,9 +179,5 @@
     }
   }
 
-  if (typeof module === 'object' && module.exports) {
-    module.exports = new buddy
-  } else {
-    window.cdnBuddy = new buddy
-  }
+  module.exports = new buddy
 })()

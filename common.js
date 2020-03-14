@@ -1,0 +1,1 @@
+window.cdnBuddy = require('./buddy.js')

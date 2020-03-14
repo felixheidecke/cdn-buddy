@@ -1,8 +1,8 @@
 module.exports = [{
   name: 'app',
-  entry: './buddy.js',
+  entry: './common.js',
   output: {
-    filename: 'buddy.js'
+    filename: 'cdn-buddy.min.js'
   },
   resolve: {
     extensions: ['.js']
