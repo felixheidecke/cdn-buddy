@@ -24,4 +24,5 @@ cdn.config = require('./config.example.json')
 ### @TODO
 
 - Better documentation
+- Add AMD Support
 - Better implementation of requirejs config support

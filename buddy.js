@@ -182,7 +182,7 @@
 
   if (typeof module === 'object' && module.exports) {
     module.exports = new buddy
+  } else {
+    window.cdnBuddy = new buddy
   }
-
-  window.cdnBuddy = new buddy
 })()
