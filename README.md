@@ -36,7 +36,7 @@ cdnBuddy.config = {
   }
 }
 
-cdnBuddy.require('jquery').then(function() {
+cdnBuddy.require(['jquery', 'vue@2.6.11/dist/vue.js']).then(function() {
   $('body').css('backgroundColor', 'lime')
 })
 ```
