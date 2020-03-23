@@ -1,6 +1,6 @@
 {
   "name": "cdn-buddy",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Load JS and CSS from a source of your choosing.",
   "main": "buddy.js",
   "repository": {
@@ -8,7 +8,9 @@
     "url": "git+https://github.com/felixheidecke/cdn-buddy.git"
   },
   "scripts": {
-    "build:common": "webpack -p"
+    "watch": "webpack -d --watch",
+    "build": "webpack -p",
+    "ncu": "npm-check-updates"
   },
   "keywords": [
     "requirejs",
@@ -22,10 +24,15 @@
   },
   "homepage": "https://github.com/felixheidecke/cdn-buddy#readme",
   "devDependencies": {
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "babel-loader": "^8.0.6",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "npm-check-updates": "^4.0.4",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs2": "^7.9.2"
   }
 }

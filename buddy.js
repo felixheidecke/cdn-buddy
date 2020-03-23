@@ -16,12 +16,11 @@
  * @copyright Felix Heidecke 2020
  */
 
-( () => {
   class buddy {
     constructor () {
       if (!window || !document) {
         console.clear()
-        console.error('cdn-buddy only runs in the browser! 😶')
+      console.error('😮 CDN-Buddy only runs in the browser!')
         return
       }
 
@@ -66,7 +65,6 @@
       return window[this.__ns_status]
     }
 
-
     /**
      * Creates a <link> DOM node
      * 
@@ -82,7 +80,6 @@
       
       return el
     }
-
 
     /**
      * Creates a <script> DOM node
@@ -146,18 +143,18 @@
             document.head.appendChild(el);
           }
           else {
-            reject('wrong filetype')
+            reject('wrong filetype for', path)
             return
           }
 
           el.addEventListener('load', () => {
-              console.info(`😀 Buddy Loaded: ${path}`)
+            console.info('😎 CDN-Buddy loaded:', path)
               window[this.__ns_status][path] = 'done'
               resolve()
           });
 
           el.addEventListener('error', error => {
-              console.info(`😡 Buddy could not load: ${path}`)
+            console.info(`😡 CDN-Buddy could not load: ${path}`)
               window[this.__ns_status][path] = 'error'
               reject(error)
           })
@@ -180,4 +177,3 @@
   }
 
   module.exports = new buddy
-})()
