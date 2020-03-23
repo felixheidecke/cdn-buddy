@@ -1,6 +1,6 @@
 module.exports = [{
   name: 'app',
-  entry: ['./amd.js'],
+  entry: ['./browser.js'],
   output: {
     filename: 'cdn-buddy.min.js'
   },

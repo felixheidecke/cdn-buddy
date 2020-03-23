@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<script src="dist/cdn-buddy.min.js"></script>
+<script>
+cdnBuddy.require(['https://unpkg.com/jquery@3.4.1/dist/jquery.js']).then( function() {
+  $('body').css('backgroundColor', 'red')
+}).catch( function(e) {
+  console.log(e)
+})
+
+</script>
+</body>
+</html>
