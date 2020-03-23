@@ -66,39 +66,6 @@
       return window[this.__ns_status]
     }
 
-
-    /**
-     * Creates a <link> DOM node
-     * 
-     * @param {string} path full CSS file URI
-     * @returns {object} HTML element
-     */
-
-    _createLinkElement (path) {
-      let el = document.createElement('link')
-      el.setAttribute('rel', 'stylesheet')
-      el.setAttribute('data-cdn-buddy', true)
-      el.setAttribute('href', path)
-      
-      return el
-    }
-
-
-    /**
-     * Creates a <script> DOM node
-     * 
-     * @param {string} path full JS file URI
-     * @returns {object} HTML element
-     */
-
-    _createScriptElement (path) {
-      let el = document.createElement('script')
-      el.setAttribute('src', path)
-      el.setAttribute('data-cdn-buddy', true)
-
-      return el
-    }
-
     /**
      * Returns the full qualified URI for a given path
      * 
@@ -127,41 +94,42 @@
     }
 
     _insert (library) {
-      let path = library
+      const reqFile = new Request(library)
+      let url, file, element
 
-      return new Promise((resolve, reject) => {
-          let el = ''
+      return fetch(reqFile).then(response => {
 
-          if (window[this.__ns_status][path] === 'done') {
-            resolve()
-            return
-          }
+        if (!response.ok) {
+          throw new Error("HTTP error, status = " + response.status);
+        }
 
-          if (path.search(/\.js$/) !== -1) {
-            el = this._createScriptElement(path)
-            document.body.appendChild(el);
-          }
-          else if (path.search(/\.css$/) !== -1) {
-            el = this._createLinkElement(path)
-            document.head.appendChild(el);
-          }
-          else {
-            reject('wrong filetype')
-            return
-          }
+        url = response.url
+        file = url.split('/').reverse()[0]
 
-          el.addEventListener('load', () => {
-              console.info(`😀 Buddy Loaded: ${path}`)
-              window[this.__ns_status][path] = 'done'
-              resolve()
-          });
+        return response.blob()
 
-          el.addEventListener('error', error => {
-              console.info(`😡 Buddy could not load: ${path}`)
-              window[this.__ns_status][path] = 'error'
-              reject(error)
-          })
-      });
+      }).then( blob => {
+        let objectURL = URL.createObjectURL(blob);
+
+        if (url.search(/\.js$/) !== -1) {
+          element = document.createElement('script')
+          element.setAttribute('src', objectURL)
+          document.body.appendChild(element)
+        }
+        else if (url.search(/\.css$/) !== -1) {
+          element = document.createElement('link')
+          element.setAttribute('rel', 'stylesheet')
+          element.setAttribute('href', objectURL)
+          document.head.appendChild(element)
+        }
+
+        console.info('😀 Buddy Loaded:', url)
+        window[this.__ns_status][library] = 'done'
+
+      }).catch( error => {
+        window[this.__ns_status][library] = 'error'
+        console.info('😡 Buddy', 'Error:', error)
+      })
     }
 
     require (lib) {

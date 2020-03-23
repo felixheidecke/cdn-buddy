@@ -1,6 +1,8 @@
+import "@babel/polyfill";
+
 module.exports = [{
   name: 'app',
-  entry: './common.js',
+  entry: ["@babel/polyfill", "./common.js"],
   output: {
     filename: 'cdn-buddy.min.js'
   },

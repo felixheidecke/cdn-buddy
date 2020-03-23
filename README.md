@@ -1,6 +1,6 @@
 # cdn-buddy
-Load JS and CSS from a CDN of your choosing.
-Supports requirejs config files.
+Load JS and CSS from a CDN (URL) of your choosing.
+Data is browser global.
 
 ## Install
 
@@ -8,32 +8,43 @@ Supports requirejs config files.
 npm i --save cdn-buddy
 ```
 
-## Usage (Webpack)
+## Doumentation
 
-### In Webpack
+### Basic usage
+
+In the ES6 context, you would basically do this:
 
 ```js
 const cdn = require('cdn-buddy')
-cdn.config = require('./config.example.json')
 
 (async function() {
-  await cdn.require(['jquery', 'vue@2.6.11/dist/vue.js'])
+  await cdn.require(['https://unpkg.com/jquery@3.4.1/dist/jquery.js'])
 
-  // Your dependent code goes here
+  // You can use $ now
 })()
 ```
 
-### In the Browser
+It also works out of the box, if you use the `dist/cdn-buddy.min.js` that
+comes in the [master.zip](https://github.com/felixheidecke/cdn-buddy/archive/master.zip) file for your working pleasure.
 
 ```html
-<script src="cdn-buddy/dist/cdn-buddy.min.js">
+<script src="cdn-buddy/dist/cdn-buddy.min.js"></script>
+<script>
+cdnBuddy.require(['https://unpkg.com/jquery@3.4.1/dist/jquery.js']).then(function() {
+  // You can use $ now
+})
+</script>
 ```
-```js
-cdnBuddy.config = {
-  "baseUrl" : "https://unpkg.com/",
-  "paths": {
-    "jquery" : "jquery@3.4.1/dist/jquery.min.js"
-  }
+
+_There will be NO AMD support, as it defeats the purpose of the script!_
+
+### configuration
+
+`baseUrl` root URL from wich all scripts are loaded. Exept absolute URLs.
+
+```JSON
+{
+  "baseUrl": "https://unpkg.com/"
 }
 
 cdnBuddy.require(['jquery', 'vue@2.6.11/dist/vue.js']).then(function() {
@@ -41,9 +52,13 @@ cdnBuddy.require(['jquery', 'vue@2.6.11/dist/vue.js']).then(function() {
 })
 ```
 
-_There will be NO AMD support, as it defeats the purpose of the script!_
+
+
 
 ### @TODO
 
 - Better documentation
-- Better implementation of requirejs config support
+
+#### Update 1.0.0
+
+- Drop require.js config support

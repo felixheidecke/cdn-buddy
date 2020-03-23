@@ -1,6 +1,6 @@
 {
   "name": "cdn-buddy",
-  "version": "0.3.3",
+  "version": "1.0.0",
   "description": "Load JS and CSS from a source of your choosing.",
   "main": "buddy.js",
   "repository": {
@@ -8,7 +8,8 @@
     "url": "git+https://github.com/felixheidecke/cdn-buddy.git"
   },
   "scripts": {
-    "build:common": "webpack -p"
+    "watch": "webpack -d --watch",
+    "build": "webpack -p"
   },
   "keywords": [
     "requirejs",
