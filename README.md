@@ -1,23 +1,28 @@
 # cdn-buddy
-Load JS and CSS from a CDN of your choosing.
-Supports requirejs config files.
+Browser friendly, promise based JS and CSS loader.
 
-## Install
+### It's all global
 
-```node
-npm i --save cdn-buddy
-```
+cdn-buddy will live in a variable you may declare:
 
-## Usage (Webpack)
+`__CDN_BUDDY_NAMESPACE = 'myBuddy' // defaults to cdnBuddy` 
 
-### In Webpack
+### In your build pipeline
 
 ```js
-const cdn = require('cdn-buddy')
-cdn.config = require('./config.example.json')
+__CDN_BUDDY_NAMESPACE = 'cdn'
+require('cdn-buddy')
+
+cdn.setConfig({
+  "baseUrl" : "https://unpkg.com/",
+  "paths": {
+    "jquery" : "jquery@3.4.1/dist/jquery.min.js"
+  }
+})
 
 (async function() {
   await cdn.require(['jquery', 'vue@2.6.11/dist/vue.js'])
+  await cdn.require(['jquery-ui'])
 
   // Your dependent code goes here
 })()
@@ -26,24 +31,9 @@ cdn.config = require('./config.example.json')
 ### In the Browser
 
 ```html
-<script src="cdn-buddy/dist/cdn-buddy.min.js">
-```
-```js
-cdnBuddy.config = {
-  "baseUrl" : "https://unpkg.com/",
-  "paths": {
-    "jquery" : "jquery@3.4.1/dist/jquery.min.js"
-  }
-}
-
+<script src="cdn-buddy/dist/cdn-buddy.min.js"></script>
+<script>
 cdnBuddy.require(['jquery', 'vue@2.6.11/dist/vue.js']).then(function() {
   $('body').css('backgroundColor', 'lime')
 })
-```
-
-_There will be NO AMD support, as it defeats the purpose of the script!_
-
-### @TODO
-
-- Better documentation
-- Better implementation of requirejs config support
+</script>

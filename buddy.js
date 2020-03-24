@@ -19,24 +19,41 @@
 import 'promise-polyfill/src/polyfill';
 
 (() => {
-  const _ns_status = '__CDN_BUDDY_STATUS'
-  const _ns_queue  = '__CDN_BUDDY_QUEUE'
-  const _ns_config = '__CDN_BUDDY_CONFIG'
+  let _ns_status = '__STATUS'
+  let _ns_queue  = '__QUEUE'
+  let _ns_config = '__CONFIG'
 
-  const _constructor = () => {
+  let _ns = (window.__CDN_BUDDY_NAMESPACE) || 'cdnBuddy'
+
+  const init = () => {
+    delete window.__CDN_BUDDY_NAMESPACE
+
     if (!window || !document) {
       console.clear()
       console.error('😮 CDN-Buddy only runs in the browser!')
       return
     }
 
-    if (!window[_ns_queue]) { window[_ns_queue] = [] }
-    if (!window[_ns_status]) { window[_ns_status] = {} }
-    if (!window[_ns_config]) {
-      window[_ns_config] = {
-        baseUrl: null,
-        paths: {}
-      }
+    if (window[_ns]) {
+      console.warn('window.' + _ns, 'is already defined')
+      return
+    }
+
+    window[_ns] = {
+      setConfig,
+      addPath,
+      require
+    }
+
+    _ns_status = _ns + _ns_status
+    _ns_queue  = _ns + _ns_queue
+    _ns_config = _ns + _ns_config
+
+    window[_ns_queue] = []
+    window[_ns_status] = {}
+    window[_ns_config] = {
+      baseUrl: null,
+      paths: {}
     }
   }
 
@@ -152,7 +169,6 @@ import 'promise-polyfill/src/polyfill';
   }
 
   const require = lib => {
-
     for (let i = 0; i < lib.length; i++) {
       let _l = _createPath(lib[i])
       for (let o = 0; o < _l.length; o++) {
@@ -164,16 +180,8 @@ import 'promise-polyfill/src/polyfill';
       }
     }
 
-    return Promise.all(window[_ns_queue]);
+    return Promise.all(window[_ns_queue]).then( () => this);
   }
 
-  _constructor()
-
-  const _export = { require, setConfig, addPath }
-
-  if (typeof module === 'object' && module.exports) {
-    module.exports = _export
-  } else {
-    window.cdnBuddy = _export
-  }
+  init()
 })()
