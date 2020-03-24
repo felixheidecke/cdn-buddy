@@ -1,1 +1,1 @@
-window.cdnBuddy = require('./buddy.js')
+cdnBuddy = require('./buddy.js')

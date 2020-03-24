@@ -16,9 +16,11 @@ module.exports = [{
         options: {
           plugins: [['@babel/plugin-transform-runtime', {
             corejs: 2
+          }], ['@babel/plugin-transform-modules-commonjs', {
+            strictMode: false
           }]],
           presets: [['@babel/preset-env', {
-            modules: 'amd'
+            modules: false
           }]]
         }
       }
