@@ -16,53 +16,43 @@
  * @copyright Felix Heidecke 2020
  */
 
-class buddy {
-  constructor () {
+import 'promise-polyfill/src/polyfill';
+
+(() => {
+  const _ns_status = '__CDN_BUDDY_STATUS'
+  const _ns_queue  = '__CDN_BUDDY_QUEUE'
+  const _ns_config = '__CDN_BUDDY_CONFIG'
+
+  const _constructor = () => {
     if (!window || !document) {
       console.clear()
-    console.error('😮 CDN-Buddy only runs in the browser!')
+      console.error('😮 CDN-Buddy only runs in the browser!')
       return
     }
 
-    this.__ns_status = '__CDN_BUDDY_STATUS'
-    this.__ns_queue  = '__CDN_BUDDY_QUEUE'
-    this.__ns_config = '__CDN_BUDDY_CONFIG'
-
-    if (!window[this.__ns_queue]) { window[this.__ns_queue] = [] }
-    if (!window[this.__ns_status]) { window[this.__ns_status] = {} }
-    if (!window[this.__ns_config]) {
-      window[this.__ns_config] = {
+    if (!window[_ns_queue]) { window[_ns_queue] = [] }
+    if (!window[_ns_status]) { window[_ns_status] = {} }
+    if (!window[_ns_config]) {
+      window[_ns_config] = {
         baseUrl: null,
         paths: {}
       }
     }
   }
 
-  set config (config) {
+  const setConfig = config => {
     if (typeof config !== 'object')
       throw Error('config setter expecting object')
 
     if (config.baseUrl)
-      window[this.__ns_config].baseUrl = config.baseUrl
+      window[_ns_config].baseUrl = config.baseUrl
 
     if (config.paths)
-      window[this.__ns_config].paths = config.paths
+      window[_ns_config].paths = config.paths
   }
 
-  set addPath (paths) {
-    Object.assign(window[this.__ns_config].paths, paths)
-  }
-
-  get queue () {
-    return window[this.__ns_queue]
-  }
-
-  get config () {
-    return window[this.__ns_config]
-  }
-
-  get status () {
-    return window[this.__ns_status]
+  const addPath = paths => {
+    Object.assign(window[_ns_config].paths, paths)
   }
 
   /**
@@ -72,7 +62,7 @@ class buddy {
    * @returns {object} HTML element
    */
 
-  _createLinkElement (path) {
+  const _createLinkElement = path => {
     let el = document.createElement('link')
     el.setAttribute('rel', 'stylesheet')
     el.setAttribute('data-cdn-buddy', true)
@@ -88,7 +78,7 @@ class buddy {
    * @returns {object} HTML element
    */
 
-  _createScriptElement (path) {
+  const _createScriptElement = path => {
     let el = document.createElement('script')
     el.setAttribute('src', path)
     el.setAttribute('data-cdn-buddy', true)
@@ -103,9 +93,9 @@ class buddy {
    * @returns {array}
    */
 
-  _createPath (path) {
-    const baseUrl = window[this.__ns_config].baseUrl
-    const paths = window[this.__ns_config].paths
+  const _createPath = path => {
+    const baseUrl = window[_ns_config].baseUrl
+    const paths = window[_ns_config].paths
 
     // Absolute URI
     if (path.search(/(http(s)?):\/\//) === 0) {
@@ -123,23 +113,23 @@ class buddy {
     return [baseUrl + '/' + path]
   }
 
-  _insert (library) {
+  const _insert = library => {
     let path = library
 
     return new Promise((resolve, reject) => {
         let el = ''
 
-        if (window[this.__ns_status][path] === 'done') {
+        if (window[_ns_status][path] === 'done') {
           resolve()
           return
         }
 
         if (path.search(/\.js$/) !== -1) {
-          el = this._createScriptElement(path)
+          el = _createScriptElement(path)
           document.body.appendChild(el);
         }
         else if (path.search(/\.css$/) !== -1) {
-          el = this._createLinkElement(path)
+          el = _createLinkElement(path)
           document.head.appendChild(el);
         }
         else {
@@ -149,31 +139,41 @@ class buddy {
 
         el.addEventListener('load', () => {
           console.info('😎 CDN-Buddy loaded:', path)
-            window[this.__ns_status][path] = 'done'
+            window[_ns_status][path] = 'done'
             resolve()
         });
 
         el.addEventListener('error', error => {
           console.info(`😡 CDN-Buddy could not load: ${path}`)
-            window[this.__ns_status][path] = 'error'
+            window[_ns_status][path] = 'error'
             reject(error)
         })
     });
   }
 
-  require (lib) {
-    for( let library of Object.values(lib)) {
-      let _l = this._createPath(library)
-      for( let __l of Object.values(_l)) {
-        if (!window[this.__ns_status][__l]) {
-          window[this.__ns_status][__l] = 'loading'
-          window[this.__ns_queue].push(this._insert(__l))
+  const require = lib => {
+
+    for (let i = 0; i < lib.length; i++) {
+      let _l = _createPath(lib[i])
+      for (let o = 0; o < _l.length; o++) {
+        let __l = _l[o]
+        if (!window[_ns_status][__l]) {
+          window[_ns_status][__l] = 'loading'
+          window[_ns_queue].push(_insert(__l))
         }
       }
     }
 
-    return Promise.all(window[this.__ns_queue]);
+    return Promise.all(window[_ns_queue]);
   }
-}
 
-module.exports = new buddy
+  _constructor()
+
+  const _export = { require, setConfig, addPath }
+
+  if (typeof module === 'object' && module.exports) {
+    module.exports = _export
+  } else {
+    window.cdnBuddy = _export
+  }
+})()

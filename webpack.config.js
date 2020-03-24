@@ -1,6 +1,6 @@
 module.exports = [{
   name: 'app',
-  entry: ['./browser.js'],
+  entry: ['./buddy.js'],
   output: {
     filename: 'cdn-buddy.min.js'
   },
@@ -14,14 +14,7 @@ module.exports = [{
       use: {
         loader: 'babel-loader',
         options: {
-          plugins: [['@babel/plugin-transform-runtime', {
-            corejs: 2
-          }], ['@babel/plugin-transform-modules-commonjs', {
-            strictMode: false
-          }]],
-          presets: [['@babel/preset-env', {
-            modules: false
-          }]]
+          presets: ['@babel/preset-env']
         }
       }
     }]
