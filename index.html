@@ -6,12 +6,22 @@
   <title>Document</title>
 </head>
 <body>
-  
-<script src="dist/cdn-buddy.min.js"></script>
-<script>
 
-cdnBuddy.require(['https://unpkg.com/jquery@3.4.1/dist/jquery.js']).then( function() {
-  $('body').css('backgroundColor', 'red')
+<script src="dist/develop.js"></script>
+<script>
+cdn.setConfig({
+  'baseUrl': 'https://cdnjs.cloudflare.com/ajax/libs',
+  'paths': {
+    'jquery' : 'jquery/3.4.1/jquery.min.js',
+    'jquery-ui' : [
+      'jquery',
+      'moment.js/2.24.0/moment.min.js'
+    ]
+  }
+})
+
+cdn.require('jquery-ui').then( function() {
+  // $('body').css('backgroundColor', 'red')
 }).catch( function(e) {
   console.log(e)
 })

@@ -19,42 +19,33 @@
 import 'promise-polyfill/src/polyfill';
 
 (() => {
-  let _ns_status = '__STATUS'
-  let _ns_queue  = '__QUEUE'
-  let _ns_config = '__CONFIG'
-
-  let _ns = (window.__CDN_BUDDY_NAMESPACE) || 'cdnBuddy'
+  let _ns_status  = NAMESPACE + '__STATUS'
+  let _ns_queue   = NAMESPACE + '__QUEUE'
+  let _ns_baseUrl = NAMESPACE + '__BASEURL'
+  let _ns_paths   = NAMESPACE + '__PATHS'
 
   const init = () => {
-    delete window.__CDN_BUDDY_NAMESPACE
-
     if (!window || !document) {
       console.clear()
       console.error('😮 CDN-Buddy only runs in the browser!')
       return
     }
 
-    if (window[_ns]) {
-      console.warn('window.' + _ns, 'is already defined')
+    if (window[NAMESPACE]) {
+      console.warn('window.' + NAMESPACE, 'is already defined')
       return
     }
 
-    window[_ns] = {
+    window[NAMESPACE] = {
       setConfig,
       addPath,
       require
     }
 
-    _ns_status = _ns + _ns_status
-    _ns_queue  = _ns + _ns_queue
-    _ns_config = _ns + _ns_config
-
-    window[_ns_queue] = []
-    window[_ns_status] = {}
-    window[_ns_config] = {
-      baseUrl: null,
-      paths: {}
-    }
+    window[_ns_queue]   = []
+    window[_ns_status]  = {}
+    window[_ns_baseUrl] = ''
+    window[_ns_paths]   = {}
   }
 
   const setConfig = config => {
@@ -62,14 +53,14 @@ import 'promise-polyfill/src/polyfill';
       throw Error('config setter expecting object')
 
     if (config.baseUrl)
-      window[_ns_config].baseUrl = config.baseUrl
+      window[_ns_baseUrl] = config.baseUrl
 
     if (config.paths)
-      window[_ns_config].paths = config.paths
+      window[_ns_paths] = config.paths
   }
 
   const addPath = paths => {
-    Object.assign(window[_ns_config].paths, paths)
+    Object.assign(window[_ns_paths], paths)
   }
 
   /**
@@ -111,8 +102,8 @@ import 'promise-polyfill/src/polyfill';
    */
 
   const _createPath = path => {
-    const baseUrl = window[_ns_config].baseUrl
-    const paths = window[_ns_config].paths
+    const baseUrl = window[_ns_baseUrl]
+    const paths = window[_ns_paths]
 
     // Absolute URI
     if (path.search(/(http(s)?):\/\//) === 0) {
@@ -120,7 +111,7 @@ import 'promise-polyfill/src/polyfill';
     }
 
     if (paths[path] && Array.isArray(paths[path])) {
-      return paths[path].map(path => baseUrl + '/' + path)
+      return paths[path].map(path => baseUrl + '/' + ((paths[path]) || path))
     }
 
     if (paths[path]) {
@@ -168,9 +159,12 @@ import 'promise-polyfill/src/polyfill';
     });
   }
 
-  const require = lib => {
-    for (let i = 0; i < lib.length; i++) {
-      let _l = _createPath(lib[i])
+  const require = function() {
+    let library = (typeof arguments[0] === 'object') ? arguments[0] : [arguments[0]]
+    let surplus = (arguments.length > 1) ?  Object.values(arguments).splice(1) : false
+
+    for (let i = 0; i < library.length; i++) {
+      let _l = _createPath(library[i])
       for (let o = 0; o < _l.length; o++) {
         let __l = _l[o]
         if (!window[_ns_status][__l]) {
@@ -180,7 +174,11 @@ import 'promise-polyfill/src/polyfill';
       }
     }
 
-    return Promise.all(window[_ns_queue]).then( () => this);
+    return Promise.all(window[_ns_queue]).then( () => {
+      if (surplus) {
+        require(...surplus)
+      }
+    });
   }
 
   init()
