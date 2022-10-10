@@ -1,3 +1,10 @@
+
+| 🚨 Warning                      |
+|---------------------------------|
+| This project was **abandoned!** |
+
+---
+
 # cdn-buddy
 Browser friendly, promise based JS and CSS loader.
 
